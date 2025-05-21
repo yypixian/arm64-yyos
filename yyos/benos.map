@@ -1,0 +1,425 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+                0x0000000000080000                . = 0x80000
+                0x0000000000080000                text_boot_start = .
+
+.text.boot      0x0000000000080000       0xd8
+ *(.text.boot)
+ .text.boot     0x0000000000080000       0xd8 build/benos/boot_s.o
+                0x0000000000080000                _start
+                0x00000000000800d8                text_boot_end = .
+                0x00000000000800d8                text_start = .
+
+.text           0x0000000000080800     0x4c88
+ *(.text)
+ .text          0x0000000000080800       0x18 build/benos/irq_c.o
+                0x0000000000080800                irq_handle
+ .text          0x0000000000080818      0x144 build/benos/page_alloc_c.o
+                0x0000000000080818                mem_init
+                0x00000000000808bc                get_free_page
+                0x0000000000080930                free_page
+ .text          0x000000000008095c      0x8b8 build/benos/mmu_c.o
+                0x0000000000080b4c                pmd_set_section
+                0x00000000000811c4                paging_init
+ .text          0x0000000000081214      0x260 build/benos/pl_uart_c.o
+                0x0000000000081214                uart_send
+                0x0000000000081264                uart_recv
+                0x00000000000812ac                uart_send_string
+                0x0000000000081308                putchar
+                0x000000000008133c                uart_init
+ .text          0x0000000000081474      0x270 build/benos/exeption_c.o
+                0x00000000000814c4                parse_esr
+                0x0000000000081674                bad_mode
+ .text          0x00000000000816e4      0x78c build/benos/dump_pagetable_c.o
+                0x0000000000081e44                dump_pgtable
+ .text          0x0000000000081e70      0x5e8 build/benos/gic_v2_c.o
+                0x0000000000081f30                gicv2_mask_irq
+                0x0000000000081f54                gicv2_unmask_irq
+                0x0000000000081f78                gicv2_eoi_irq
+                0x0000000000082050                gic_handle_irq
+                0x00000000000820e4                gic_dist_init
+                0x0000000000082374                gic_init
+ .text          0x0000000000082458      0x1d4 build/benos/timer_c.o
+                0x00000000000824ac                timer_init
+                0x00000000000824e0                handle_timer_irq
+                0x0000000000082510                system_timer_init
+                0x00000000000825ac                handle_stimer_irq
+ .text          0x000000000008262c      0x1e8 build/benos/memset_c.o
+                0x00000000000827e8                memset
+ .text          0x0000000000082814      0x26c build/benos/kernel_c.o
+                0x0000000000082870                print_memory
+                0x0000000000082a3c                kernel_main
+ .text          0x0000000000082a80       0x18 build/benos/memset_s.o
+                0x0000000000082a80                __memset_16bytes
+ *fill*         0x0000000000082a98      0x568 
+ .text          0x0000000000083000     0x1028 build/benos/entry_s.o
+                0x0000000000083800                vectors
+                0x0000000000084014                trigger_alignment
+ .text          0x0000000000084028        0x0 build/benos/boot_s.o
+ .text          0x0000000000084028       0x10 build/benos/mm_s.o
+                0x0000000000084028                memzero
+ .text          0x0000000000084038       0xe8 build/benos/early_usart_s.o
+                0x0000000000084038                __init_uart
+                0x000000000008409c                put_uart
+                0x00000000000840bc                put_string_uart
+ .text          0x0000000000084120      0x120 build/benos/TEST_s.o
+                0x0000000000084120                test_S
+                0x0000000000084140                memcopy_S
+                0x0000000000084160                CMP_test
+                0x0000000000084190                UBFX_test
+                0x00000000000841a0                CESL_test
+                0x00000000000841b8                my_test_data
+                0x00000000000841c0                LDR_ADR_test
+                0x00000000000841e8                my_data
+                0x00000000000841f0                atomic_write
+                0x000000000008420c                atomic_set
+ .text          0x0000000000084240     0x11a0 build/lib/printk_c.o
+                0x0000000000084698                myprintf
+                0x0000000000085200                init_printk_done
+                0x0000000000085288                printk
+ .text          0x00000000000853e0       0xa8 build/lib/string_c.o
+                0x00000000000853e0                strlen
+                0x0000000000085424                memcpy
+                0x0000000000085488                text_end = .
+                0x0000000000085488                rodata_start = .
+
+.iplt           0x0000000000085488        0x0
+ .iplt          0x0000000000085488        0x0 build/benos/irq_c.o
+
+.rodata         0x0000000000085488      0x9d7
+ *(.rodata)
+ .rodata        0x0000000000085488       0x27 build/benos/page_alloc_c.o
+ *fill*         0x00000000000854af        0x1 
+ .rodata        0x00000000000854b0       0x19 build/benos/mmu_c.o
+ *fill*         0x00000000000854c9        0x7 
+ .rodata        0x00000000000854d0      0x5fa build/benos/exeption_c.o
+ *fill*         0x0000000000085aca        0x6 
+ .rodata        0x0000000000085ad0      0x14d build/benos/dump_pagetable_c.o
+ *fill*         0x0000000000085c1d        0x3 
+ .rodata        0x0000000000085c20       0x59 build/benos/gic_v2_c.o
+ *fill*         0x0000000000085c79        0x7 
+ .rodata        0x0000000000085c80       0x41 build/benos/timer_c.o
+ *fill*         0x0000000000085cc1        0x7 
+ .rodata        0x0000000000085cc8      0x12a build/benos/kernel_c.o
+ *fill*         0x0000000000085df2        0x6 
+ .rodata        0x0000000000085df8        0xe build/benos/boot_s.o
+                0x0000000000085df8                el_string
+ *fill*         0x0000000000085e06        0x2 
+ .rodata        0x0000000000085e08       0x57 build/lib/printk_c.o
+                0x0000000000085e5f                rodata_end = .
+                0x0000000000085e5f                data_start = .
+
+.eh_frame       0x0000000000085e60      0x8b0
+ .eh_frame      0x0000000000085e60       0x38 build/benos/irq_c.o
+ .eh_frame      0x0000000000085e98       0x50 build/benos/page_alloc_c.o
+                                         0x68 (size before relaxing)
+ .eh_frame      0x0000000000085ee8      0x210 build/benos/mmu_c.o
+                                        0x228 (size before relaxing)
+ .eh_frame      0x00000000000860f8       0x88 build/benos/pl_uart_c.o
+                                         0xa0 (size before relaxing)
+ .eh_frame      0x0000000000086180       0x78 build/benos/exeption_c.o
+                                         0x88 (size before relaxing)
+ .eh_frame      0x00000000000861f8      0x140 build/benos/dump_pagetable_c.o
+                                        0x158 (size before relaxing)
+ .eh_frame      0x0000000000086338      0x140 build/benos/gic_v2_c.o
+                                        0x158 (size before relaxing)
+ .eh_frame      0x0000000000086478       0xc8 build/benos/timer_c.o
+                                         0xd8 (size before relaxing)
+ .eh_frame      0x0000000000086540       0x58 build/benos/memset_c.o
+                                         0x70 (size before relaxing)
+ .eh_frame      0x0000000000086598       0xb0 build/benos/kernel_c.o
+                                         0xc8 (size before relaxing)
+ .eh_frame      0x0000000000086648       0x98 build/lib/printk_c.o
+                                         0xb0 (size before relaxing)
+ .eh_frame      0x00000000000866e0       0x30 build/lib/string_c.o
+                                         0x48 (size before relaxing)
+
+.rela.dyn       0x0000000000086710        0x0
+ .rela.iplt     0x0000000000086710        0x0 build/benos/irq_c.o
+ .rela.got      0x0000000000086710        0x0 build/benos/irq_c.o
+ .rela.text.boot
+                0x0000000000086710        0x0 build/benos/irq_c.o
+ .rela.text     0x0000000000086710        0x0 build/benos/irq_c.o
+
+.data           0x0000000000086710        0x8
+ *(.data)
+ .data          0x0000000000086710        0x0 build/benos/irq_c.o
+ .data          0x0000000000086710        0x0 build/benos/page_alloc_c.o
+ .data          0x0000000000086710        0x0 build/benos/mmu_c.o
+ .data          0x0000000000086710        0x0 build/benos/pl_uart_c.o
+ .data          0x0000000000086710        0x0 build/benos/exeption_c.o
+ .data          0x0000000000086710        0x0 build/benos/dump_pagetable_c.o
+ .data          0x0000000000086710        0x0 build/benos/gic_v2_c.o
+ .data          0x0000000000086710        0x8 build/benos/timer_c.o
+ .data          0x0000000000086718        0x0 build/benos/memset_c.o
+ .data          0x0000000000086718        0x0 build/benos/kernel_c.o
+ .data          0x0000000000086718        0x0 build/benos/memset_s.o
+ .data          0x0000000000086718        0x0 build/benos/entry_s.o
+ .data          0x0000000000086718        0x0 build/benos/boot_s.o
+ .data          0x0000000000086718        0x0 build/benos/mm_s.o
+ .data          0x0000000000086718        0x0 build/benos/early_usart_s.o
+ .data          0x0000000000086718        0x0 build/benos/TEST_s.o
+ .data          0x0000000000086718        0x0 build/lib/printk_c.o
+ .data          0x0000000000086718        0x0 build/lib/string_c.o
+
+.igot.plt       0x0000000000086718        0x0
+ .igot.plt      0x0000000000086718        0x0 build/benos/irq_c.o
+
+.got            0x0000000000086718       0x60
+ .got           0x0000000000086718       0x60 build/benos/irq_c.o
+                0x0000000000086718                _GLOBAL_OFFSET_TABLE_
+
+.got.plt        0x0000000000086778       0x18
+ .got.plt       0x0000000000086778       0x18 build/benos/irq_c.o
+
+.data.rel.ro.local
+                0x0000000000086790      0x210
+ .data.rel.ro.local
+                0x0000000000086790       0x20 build/benos/exeption_c.o
+ .data.rel.ro.local
+                0x00000000000867b0      0x1f0 build/benos/dump_pagetable_c.o
+
+.data.rel.local
+                0x00000000000869a0      0x458
+ .data.rel.local
+                0x00000000000869a0      0x3b0 build/benos/exeption_c.o
+ .data.rel.local
+                0x0000000000086d50       0xa0 build/benos/dump_pagetable_c.o
+ .data.rel.local
+                0x0000000000086df0        0x8 build/lib/printk_c.o
+                0x0000000000087000                . = ALIGN (0x1000)
+                0x0000000000087000                idmap_pg_dir = .
+                0x0000000000088000                . = (. + 0x1000)
+                0x0000000000088000                data_end = .
+                0x0000000000088000                . = ALIGN (0x8)
+                0x0000000000088000                bss_begin = .
+
+.bss            0x0000000000088000    0x60448
+ *(.bss*)
+ .bss           0x0000000000088000        0x0 build/benos/irq_c.o
+ .bss           0x0000000000088000    0x40008 build/benos/page_alloc_c.o
+ .bss           0x00000000000c8008        0x0 build/benos/mmu_c.o
+ .bss           0x00000000000c8008        0x0 build/benos/pl_uart_c.o
+ .bss           0x00000000000c8008        0x0 build/benos/exeption_c.o
+ .bss           0x00000000000c8008        0x0 build/benos/dump_pagetable_c.o
+ .bss           0x00000000000c8008       0x28 build/benos/gic_v2_c.o
+ .bss           0x00000000000c8030        0x4 build/benos/timer_c.o
+ .bss           0x00000000000c8034        0x0 build/benos/memset_c.o
+ .bss           0x00000000000c8034        0x0 build/benos/kernel_c.o
+ .bss           0x00000000000c8034        0x0 build/benos/memset_s.o
+ .bss           0x00000000000c8034        0x0 build/benos/entry_s.o
+ .bss           0x00000000000c8034        0x0 build/benos/boot_s.o
+ .bss           0x00000000000c8034        0x0 build/benos/mm_s.o
+ .bss           0x00000000000c8034        0x0 build/benos/early_usart_s.o
+ .bss           0x00000000000c8034        0x0 build/benos/TEST_s.o
+ *fill*         0x00000000000c8034        0x4 
+ .bss           0x00000000000c8038    0x20410 build/lib/printk_c.o
+ .bss           0x00000000000e8448        0x0 build/lib/string_c.o
+                0x00000000000e8448                bss_end = .
+                0x00000000000e9000                . = ALIGN (0x1000)
+                0x00000000000e9000                init_pg_dir = .
+                0x00000000000ea000                . = (. + 0x1000)
+LOAD build/benos/irq_c.o
+LOAD build/benos/page_alloc_c.o
+LOAD build/benos/mmu_c.o
+LOAD build/benos/pl_uart_c.o
+LOAD build/benos/exeption_c.o
+LOAD build/benos/dump_pagetable_c.o
+LOAD build/benos/gic_v2_c.o
+LOAD build/benos/timer_c.o
+LOAD build/benos/memset_c.o
+LOAD build/benos/kernel_c.o
+LOAD build/benos/memset_s.o
+LOAD build/benos/entry_s.o
+LOAD build/benos/boot_s.o
+LOAD build/benos/mm_s.o
+LOAD build/benos/early_usart_s.o
+LOAD build/benos/TEST_s.o
+LOAD build/lib/printk_c.o
+LOAD build/lib/string_c.o
+OUTPUT(build/benos/benos.elf elf64-littleaarch64)
+LOAD linker stubs
+
+.debug_info     0x0000000000000000     0x2c69
+ .debug_info    0x0000000000000000       0x48 build/benos/irq_c.o
+ .debug_info    0x0000000000000048      0x135 build/benos/page_alloc_c.o
+ .debug_info    0x000000000000017d      0xa2d build/benos/mmu_c.o
+ .debug_info    0x0000000000000baa      0x323 build/benos/pl_uart_c.o
+ .debug_info    0x0000000000000ecd      0x233 build/benos/exeption_c.o
+ .debug_info    0x0000000000001100      0x7bc build/benos/dump_pagetable_c.o
+ .debug_info    0x00000000000018bc      0x681 build/benos/gic_v2_c.o
+ .debug_info    0x0000000000001f3d      0x256 build/benos/timer_c.o
+ .debug_info    0x0000000000002193      0x1e1 build/benos/memset_c.o
+ .debug_info    0x0000000000002374      0x233 build/benos/kernel_c.o
+ .debug_info    0x00000000000025a7       0x2e build/benos/memset_s.o
+ .debug_info    0x00000000000025d5       0x2e build/benos/entry_s.o
+ .debug_info    0x0000000000002603       0x2e build/benos/boot_s.o
+ .debug_info    0x0000000000002631       0x2e build/benos/mm_s.o
+ .debug_info    0x000000000000265f       0x2e build/benos/early_usart_s.o
+ .debug_info    0x000000000000268d       0x2e build/benos/TEST_s.o
+ .debug_info    0x00000000000026bb      0x4a6 build/lib/printk_c.o
+ .debug_info    0x0000000000002b61      0x108 build/lib/string_c.o
+
+.debug_abbrev   0x0000000000000000      0xef1
+ .debug_abbrev  0x0000000000000000       0x2e build/benos/irq_c.o
+ .debug_abbrev  0x000000000000002e       0xd4 build/benos/page_alloc_c.o
+ .debug_abbrev  0x0000000000000102      0x242 build/benos/mmu_c.o
+ .debug_abbrev  0x0000000000000344       0xea build/benos/pl_uart_c.o
+ .debug_abbrev  0x000000000000042e      0x140 build/benos/exeption_c.o
+ .debug_abbrev  0x000000000000056e      0x200 build/benos/dump_pagetable_c.o
+ .debug_abbrev  0x000000000000076e      0x198 build/benos/gic_v2_c.o
+ .debug_abbrev  0x0000000000000906      0x124 build/benos/timer_c.o
+ .debug_abbrev  0x0000000000000a2a       0xe1 build/benos/memset_c.o
+ .debug_abbrev  0x0000000000000b0b      0x112 build/benos/kernel_c.o
+ .debug_abbrev  0x0000000000000c1d       0x14 build/benos/memset_s.o
+ .debug_abbrev  0x0000000000000c31       0x14 build/benos/entry_s.o
+ .debug_abbrev  0x0000000000000c45       0x14 build/benos/boot_s.o
+ .debug_abbrev  0x0000000000000c59       0x14 build/benos/mm_s.o
+ .debug_abbrev  0x0000000000000c6d       0x14 build/benos/early_usart_s.o
+ .debug_abbrev  0x0000000000000c81       0x14 build/benos/TEST_s.o
+ .debug_abbrev  0x0000000000000c95      0x1a5 build/lib/printk_c.o
+ .debug_abbrev  0x0000000000000e3a       0xb7 build/lib/string_c.o
+
+.debug_aranges  0x0000000000000000      0x360
+ .debug_aranges
+                0x0000000000000000       0x30 build/benos/irq_c.o
+ .debug_aranges
+                0x0000000000000030       0x30 build/benos/page_alloc_c.o
+ .debug_aranges
+                0x0000000000000060       0x30 build/benos/mmu_c.o
+ .debug_aranges
+                0x0000000000000090       0x30 build/benos/pl_uart_c.o
+ .debug_aranges
+                0x00000000000000c0       0x30 build/benos/exeption_c.o
+ .debug_aranges
+                0x00000000000000f0       0x30 build/benos/dump_pagetable_c.o
+ .debug_aranges
+                0x0000000000000120       0x30 build/benos/gic_v2_c.o
+ .debug_aranges
+                0x0000000000000150       0x30 build/benos/timer_c.o
+ .debug_aranges
+                0x0000000000000180       0x30 build/benos/memset_c.o
+ .debug_aranges
+                0x00000000000001b0       0x30 build/benos/kernel_c.o
+ .debug_aranges
+                0x00000000000001e0       0x30 build/benos/memset_s.o
+ .debug_aranges
+                0x0000000000000210       0x30 build/benos/entry_s.o
+ .debug_aranges
+                0x0000000000000240       0x30 build/benos/boot_s.o
+ .debug_aranges
+                0x0000000000000270       0x30 build/benos/mm_s.o
+ .debug_aranges
+                0x00000000000002a0       0x30 build/benos/early_usart_s.o
+ .debug_aranges
+                0x00000000000002d0       0x30 build/benos/TEST_s.o
+ .debug_aranges
+                0x0000000000000300       0x30 build/lib/printk_c.o
+ .debug_aranges
+                0x0000000000000330       0x30 build/lib/string_c.o
+
+.debug_line     0x0000000000000000     0x1473
+ .debug_line    0x0000000000000000       0x45 build/benos/irq_c.o
+ .debug_line    0x0000000000000045       0xa1 build/benos/page_alloc_c.o
+ .debug_line    0x00000000000000e6      0x2f6 build/benos/mmu_c.o
+ .debug_line    0x00000000000003dc       0xea build/benos/pl_uart_c.o
+ .debug_line    0x00000000000004c6       0xf8 build/benos/exeption_c.o
+ .debug_line    0x00000000000005be      0x2d6 build/benos/dump_pagetable_c.o
+ .debug_line    0x0000000000000894      0x1bf build/benos/gic_v2_c.o
+ .debug_line    0x0000000000000a53       0x89 build/benos/timer_c.o
+ .debug_line    0x0000000000000adc       0xf9 build/benos/memset_c.o
+ .debug_line    0x0000000000000bd5       0xbc build/benos/kernel_c.o
+ .debug_line    0x0000000000000c91       0x43 build/benos/memset_s.o
+ .debug_line    0x0000000000000cd4       0xa3 build/benos/entry_s.o
+ .debug_line    0x0000000000000d77       0x6a build/benos/boot_s.o
+ .debug_line    0x0000000000000de1       0x3d build/benos/mm_s.o
+ .debug_line    0x0000000000000e1e       0x6f build/benos/early_usart_s.o
+ .debug_line    0x0000000000000e8d       0x7f build/benos/TEST_s.o
+ .debug_line    0x0000000000000f0c      0x4e4 build/lib/printk_c.o
+ .debug_line    0x00000000000013f0       0x83 build/lib/string_c.o
+
+.debug_str      0x0000000000000000      0x9e2
+ .debug_str     0x0000000000000000       0xb4 build/benos/irq_c.o
+ .debug_str     0x00000000000000b4       0x7a build/benos/page_alloc_c.o
+                                        0x135 (size before relaxing)
+ .debug_str     0x000000000000012e      0x258 build/benos/mmu_c.o
+                                        0x359 (size before relaxing)
+ .debug_str     0x0000000000000386       0x4e build/benos/pl_uart_c.o
+                                         0xff (size before relaxing)
+ .debug_str     0x00000000000003d4       0x90 build/benos/exeption_c.o
+                                        0x15d (size before relaxing)
+ .debug_str     0x0000000000000464       0xef build/benos/dump_pagetable_c.o
+                                        0x2d6 (size before relaxing)
+ .debug_str     0x0000000000000553      0x131 build/benos/gic_v2_c.o
+                                        0x21d (size before relaxing)
+ .debug_str     0x0000000000000684       0x7d build/benos/timer_c.o
+                                        0x14d (size before relaxing)
+ .debug_str     0x0000000000000701       0x37 build/benos/memset_c.o
+                                        0x16a (size before relaxing)
+ .debug_str     0x0000000000000738       0xa2 build/benos/kernel_c.o
+                                        0x1af (size before relaxing)
+ .debug_str     0x00000000000007da       0x19 build/benos/memset_s.o
+                                         0x42 (size before relaxing)
+ .debug_str     0x00000000000007f3        0xc build/benos/entry_s.o
+                                         0x41 (size before relaxing)
+ .debug_str     0x00000000000007ff        0xb build/benos/boot_s.o
+                                         0x40 (size before relaxing)
+ .debug_str     0x000000000000080a        0x9 build/benos/mm_s.o
+                                         0x3e (size before relaxing)
+ .debug_str     0x0000000000000813       0x12 build/benos/early_usart_s.o
+                                         0x47 (size before relaxing)
+ .debug_str     0x0000000000000825        0xb build/benos/TEST_s.o
+                                         0x40 (size before relaxing)
+ .debug_str     0x0000000000000830      0x123 build/lib/printk_c.o
+                                        0x27a (size before relaxing)
+ .debug_str     0x0000000000000953       0x8f build/lib/string_c.o
+                                         0xd7 (size before relaxing)
+
+.comment        0x0000000000000000       0x4f
+ .comment       0x0000000000000000       0x2b build/benos/irq_c.o
+                                         0x2c (size before relaxing)
+ .comment       0x000000000000002b       0x2c build/benos/page_alloc_c.o
+ .comment       0x000000000000002b       0x2c build/benos/mmu_c.o
+ .comment       0x000000000000002b       0x2c build/benos/pl_uart_c.o
+ .comment       0x000000000000002b       0x2c build/benos/exeption_c.o
+ .comment       0x000000000000002b       0x2c build/benos/dump_pagetable_c.o
+ .comment       0x000000000000002b       0x2c build/benos/gic_v2_c.o
+ .comment       0x000000000000002b       0x2c build/benos/timer_c.o
+ .comment       0x000000000000002b       0x2c build/benos/memset_c.o
+ .comment       0x000000000000002b       0x2c build/benos/kernel_c.o
+ .comment       0x000000000000002b       0x2c build/lib/printk_c.o
+ .comment       0x000000000000002b       0x24 build/lib/string_c.o
+                                         0x25 (size before relaxing)
+
+.note.GNU-stack
+                0x0000000000000000        0x0
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/benos/irq_c.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/benos/page_alloc_c.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/benos/mmu_c.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/benos/pl_uart_c.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/benos/exeption_c.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/benos/dump_pagetable_c.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/benos/gic_v2_c.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/benos/timer_c.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/benos/memset_c.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/benos/kernel_c.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib/printk_c.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib/string_c.o
